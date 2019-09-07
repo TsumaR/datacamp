@@ -53,4 +53,20 @@ mergeした際にcommitが２つの親をもつ，それを識別するために
 branchは通常のバージョンコントロールと同じような操作性を持つ。例えば，branch間の比較をする場合，`git diff branch-1..branch-2`で可能である。  
 `git checkout branch_name`でブランチ間の移動が可能である。また，`git checkout -b branch-name`とすれば，新しいbranchを作成しながらそのbranchに移動することができる。
 
-##### bran
+##### branchをmergeする
+`git merge source destination`でmergeすることができる。destinationにsourceをmergeしている。
+branch同士で同じファイルに変更点がある場合がある。その場合は`git status`などで競合部分を確認して変更するべき点を変更する。  
+
+## レポジトリの元の操作  
+
+##### レポジトリの作成  
+`git init project-name`ただし，１つのレポジトリの中に新たにレポジトリを作成しないように注意する。
+
+##### リモート(githubなど)
+また，クローンを作成したいときは`git clone url`でgithubから持ってくることができる。その場合，`git remote -v`で元のリモートurlを確認することができる。  
+通常`git clone`するとリモートがoriginという名前で保存される。さらにリモートを加えたい場合は，`git remote add remote-name URL`とすることで追加することができる，名前を指定して追加するだけのためにも使える。また，既存のリモートを消去したい場合は`git remote rm remote-name`とする。  
+リモートを活用する場合，まず`git pull remote branch`でリモートの最新版をローカルに持ってくる。この操作は，リモートのbranchを，ローカルの自分のbranchにmergeすることを意味する。`remote`でリモートbranchの名前，`branch`でmergeするローカルのbranchを指定する。  
+ローカルの変更を保存しないで`pull`しようとするとエラーが生じて止めてくれる。先にローカルの変更を`commit`してやり直せば良い。それか，ローカルの変更を保存したくないなら，`git checkout -- .`すれば良い。他者の変更をなかったことにして上書きすることが無いようになっている。  
+何かコメントを残したく無いときは`git pull --no-edit origin master`で良い。
+
+逆にローカルの変更をリモートに送るときは`git push remote-name branch-name`すれば良い。リモートのレポジトリ名とローカルのレポジトリ名は共通であることが望ましい。
