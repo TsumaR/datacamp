@@ -1,6 +1,6 @@
 # sckit-learnを使った教師あり学習  
 
-### EDA(探索的データ分析)  
+## EDA(探索的データ分析)  
 irisデータセットなどなら`pyplot`の`scatter_matrix()`などで一気に目視するのがわかりやすい。  
 binaryファイルの場合，
 ```
@@ -13,7 +13,7 @@ plt.show()
 ヒートマップのオススメは，
 `sns.heatmap(df.corr(), square=True, cmap='')`
 
-### skleanの導入  
+## skleanの導入  
 skleanでは，columnが特徴，rowがサンプルを示している必要がある。また，通常欠損値を受け付けない。
 例えば，knnでn=6の判別機を作成し適応する場合は以下のようにする。
 ```
@@ -30,14 +30,14 @@ print(knn.score(X_test, y_test))
 *めも*
 通常のnumpy array(139,)を，たて一列に表示させるには`.reshape(-1,1)`でいける。
 
-## trainデータとテストデータを分ける  
+### trainデータとテストデータを分ける  
 #### 単純に
 ```
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=42)
 ```  
 
-###  線形回帰
+##  線形回帰
 #### 最小二乗法
 `from sklearn.linear_model import LinearRegression`
 
@@ -81,7 +81,7 @@ ROC曲線では「　のような形になるのが最高のモデルであっ�
 `from sklearn.metrics import roc_auc_score`
 `cv_auc = cross_val_score(logreg, X_test, y_test, cv=5, scoring='roc_auc')`
 
-### ハイパーパラメター  
+#### ハイパーパラメター  
 kNNや，ラッソ回帰などでは，最適化のために自分で設定する必要のあるパラメタが存在し，それらはハイパーパラメターと呼ばれる。これらを最適化するためにまず考えられるのは，cross variationで様々なパターンを試し最適のものを決定する方法である。この操作を行う場合，scikit learnでは`GridSearchCV`が便利であり，複数のハイパーパラメタを同時に組み合わせて比較することも可能である。  
 ```
 from sklearn.linear_model import LogisticRegression
