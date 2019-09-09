@@ -98,4 +98,35 @@ print("Best score is {}".format(logreg_cv.best_score_))
 注意として，ロジスティック回帰はL1，L2ノルムを決定するペナルティを設定するハイパラメタも存在する。`param_grid = {'C': s_space, 'penalty': ['l1', 'l2']}`
 ただし，`GridSearchCV`は計算量が多くなってしまうことがあるので，その場合は`RandomizedSearchCV`を使うのが良い  
 
-### Hold out
+## 実際のデータ  
+実際のデータを処理する場合，多くの欠損値やカテゴリー変数が含まれており，sklearnが処理できない形をしていることが多いため，事前処理をすることが重要になってくる。
+
+#### カテゴリー変数
+例えば，カテゴリー変数をダミー変数に変更するにはpandasの`pd.get_dammies()`が便利。`pd.get_dummies(df, drop_first=True)`で必要ないダミー変数の列を作成しないことができる。  
+
+#### 欠損値の扱い
+実際のデータだと欠損値が0や9999だったりするため，sklearnで簡単に処理するためにはまず，それらを`NaN`にすることが望ましい。 `df[df == '?'] = np.nan`のように
+また，欠損値を全て除くなら`.dropna()`などがあるが，非欠損値のなかで平均を取りそれを欠損値に当てはめる方法もある。cvで最適パラメタを探しながら，欠損値処理も含めパイプラインで処理する例e
+```
+from sklearn.preprocessing import Imputer
+from sklearn.pipeline import Pipeline
+
+imp = Imputer(missing_values='NaN', strategy='most_frequent', axis=0)
+clf = SVC()
+
+#パイプラインで実行ste
+steps = [('imputation', imp),
+        ('SVM', clf)]
+pipeline = Pipeline(steps)
+
+parameters = {'SVM__C':[1, 10, 100],
+              'SVM__gamma':[0.1, 0.01]}
+
+cv = GridSearchCV(pipeline, param_grid=parameters)
+y_pred = cv.predict(X_test)
+
+#確認X,te
+print("Accuracy: {}".format(cv.score(X_test, y_test)))
+print(classification_report(y_test, y_pred))
+print("Tuned Model Parameters: {}".format(cv.best_params_))
+```
