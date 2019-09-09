@@ -35,7 +35,19 @@ print(knn.score(X_test, y_test))
 ```
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=42)
-```  
+```   
+しかし，この方法だとトレーニングデータに含まれていないラベルがテストデータに含まれてしまうなどの問題が生じることがある。そのため，通常は`multilabel_train_test_split`など，その点を考慮した方法を利用する。
+```
+from sklearn.multiclass import OneVsRestClassifier
+X_train, X_test, y_train, y_test = multilabel_train_test_split(numeric_data_only,
+                                                               label_dummies,
+                                                               size=0.2,
+                                                               seed=123)
+clf = OneVsRestClassifier(LogisticRegression())
+clf.fit(X_train, y_train)
+```
+この場合上記のようにone vs restをする。(なんでか理解できなかった，調べて。)
+
 
 ##  線形回帰
 #### 最小二乗法
