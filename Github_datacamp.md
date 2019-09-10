@@ -38,14 +38,14 @@ temporaryファイルなど，gitで追跡したくないファイルも存在�
 
 #### データ保存の仕組み  
 各commitは作者や日付，メッセージなどのメタデータを含むのと同時にtreeをもつ。各treeはcommitした際にレポジトリが保持しているファイル名とその場所が保存されている。treeが持つ各ファイルにはblobという，commitが起きた際のファイル内容を簡潔に記載したbinaryファイルが存在する。変更がなされていないときは以前のcommit内容に結びつくようになっている。`git add`されるまでは当然のごとくtreeやblobが存在しない。
-[gitの仕組み](https://assets.datacamp.com/production/repositories/1545/datasets/71c08f5726f7192c0303d4ce84d4ecb9336c6fa5/gds_2_1_diagram.svg)
+![gitの仕組み](https://assets.datacamp.com/production/repositories/1545/datasets/71c08f5726f7192c0303d4ce84d4ecb9336c6fa5/gds_2_1_diagram.svg)
 
 #### gitの設定を変更する  
 `git config --list`で現在のセッティングを確認できる。ローカルセッティングだけを確認するなら`git config --list --local`のようにflexibleに利用できる。
 `git config --global setting value`で全体に対する設定を変更できる。通常使用しない方が良いが，メールアドレスを変更したい場合などに利用する。その場合は`git config --global user.email rep.loop@datacamp.com`のように指定する。  
 
 ## branchについて  
-[branchの仕組み](https://assets.datacamp.com/production/repositories/1545/datasets/836c41b57bbbd4d589a3d0a08e9befebd9807790/gds_4_1_diagram.svg)
+![branchの仕組み](https://assets.datacamp.com/production/repositories/1545/datasets/836c41b57bbbd4d589a3d0a08e9befebd9807790/gds_4_1_diagram.svg)
 mergeした際にcommitが２つの親をもつ，それを識別するために`tree`が必要だったという訳である。  
 
 #### branchの確認  
@@ -69,4 +69,4 @@ branch同士で同じファイルに変更点がある場合がある。その�
 ローカルの変更を保存しないで`pull`しようとするとエラーが生じて止めてくれる。先にローカルの変更を`commit`してやり直せば良い。それか，ローカルの変更を保存したくないなら，`git checkout -- .`すれば良い。他者の変更をなかったことにして上書きすることが無いようになっている。  
 何かコメントを残したく無いときは`git pull --no-edit origin master`で良い。
 
-逆にローカルの変更をリモートに送るときは`git push remote-name branch-name`すれば良い。リモートのレポジトリ名とローカルのレポジトリ名は共通であることが望ましい。
+逆にローカルの変更をリモートに送るときは`git push remote-name branch-name`すれば良い。リモートのレポジトリ名とローカルのレポジトリ名は共通であることが望ましい。  
