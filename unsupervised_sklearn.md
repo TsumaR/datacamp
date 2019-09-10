@@ -20,3 +20,32 @@ KMeansではアルゴリズムの性質上，分散の大きい特徴を重要�
 
 ##階層的クラスタリング
 SciPyの`linkage()`で階層的クラスタリングを行い，`dendrogram()`で結果を図示することができる。
+```
+from scipy.cluster.hierarchy import linkage, dendrogram
+mergings = linkage(samples, method='complete')
+
+dendrogram(mergings,
+           labels=varieties,
+           leaf_rotation=90,
+           leaf_font_size=6,
+)
+plt.show()
+```
+注意しないといけないのは，scipyの階層的クラスタリングはsklearnのパイプライン処理に対応していないので`Normalizer()`をパイプラインで使用できず以下のように処理する必要がある。
+```
+from sklearn.preprocessing import normalize
+normalized_movements = normalize(movements)
+```
+
+#### t-SNE
+詳しくはここでは説明しない，論文を読むこと。データに応じて変数を変更する必要があることなど注意点が多い。最近ではUMAPに取って代われれている(バイオインフォ界だけではないはず。)
+```
+from sklearn.manifold import TSNE
+
+#モデルの作成。learning_rateは一般に50~200が良いことが多い。
+model = TSNE(learning_rate=200)
+
+tsne_features = model.fit_transform(samples)
+xs = tsne_features[:,0]
+ys = tsne_features[:,1]
+```
