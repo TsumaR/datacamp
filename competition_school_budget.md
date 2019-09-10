@@ -71,5 +71,10 @@ print("\nAccuracy on sample data - all data: ", accuracy)
 ```
 パイプラインを使うことでモデルの変更の際に必要な書き換えを一部にすることができるなどの利点もある。
 
-## 精度の向上　
+### 精度の向上　
 上のモデルでは，区切り文字を全て同等として扱った上に，1単語ずつの区切りでしか処理しなかった。言語処理の際に利用した`CountVectorizer()`に少し変更を加えるだけでモデルの精度ははるかに向上する。
+`CountVectorizer(ngram_range=(1, 2))`では，bag-of-wordsで二連続の文字も１つの特徴量として扱うようにできる。　相互作用を考慮するなら`PolynomialFeatures`を用いるのが良い。これを用いると，２つの特徴（単語のペアや単語）が同時に存在するときの重要性を考慮に入れることができる。同様の処理ができるものの使い方の例を示すと，`SparseInteractions(degree=2)`のようになり，degreeを指定する必要がある。
+`from sklearn.feature_extraction.text import HashingVectorizer`
+
+
+詳しくは[jupyter_notebook](notebooks/1.0-full-model.ipynb)をみると良い。
