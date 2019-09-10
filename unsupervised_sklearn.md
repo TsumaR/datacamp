@@ -5,7 +5,7 @@
 ```
 centroids = model.cluster_centers_
 ```
-データをscatter plotして，KMeansなど教師なし学習の結果をプロットの色として表示して，クラスタの中心をプロットしてあげると見やすい絵を得ることができる。![KMenas例](file:///Users/wagatsuma/Downloads/ex_kmeans.svg)
+データをscatter plotして，KMeansなど教師なし学習の結果をプロットの色として表示して，クラスタの中心をプロットしてあげると見やすい絵を得ることができる。![KMenas例](https://github.com/TsumaR/datacamp/blob/master/images/ex_kmeans.svg)
 
 ## クラスタの評価
 
@@ -49,3 +49,5 @@ tsne_features = model.fit_transform(samples)
 xs = tsne_features[:,0]
 ys = tsne_features[:,1]
 ```
+## 次元削減(PCA)
+実際のデータではノイズが多く含まれるデータを扱うことになるため，重要な要素だけを抽出し処理することで教師なし学習が可能になる。そのために最も用いられるのがPCAである。PCAは2ステップからなる。　
