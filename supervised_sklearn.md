@@ -109,6 +109,7 @@ print("Best score is {}".format(logreg_cv.best_score_))
 ```
 注意として，ロジスティック回帰はL1，L2ノルムを決定するペナルティを設定するハイパラメタも存在する。`param_grid = {'C': s_space, 'penalty': ['l1', 'l2']}`
 ただし，`GridSearchCV`は計算量が多くなってしまうことがあるので，その場合は`RandomizedSearchCV`を使うのが良い  
+`Optuna`というハイパーパラメータ自動最適化ツールも存在し，便利である [Optuma](https://www.kaggle.com/currypurin/tutorial-of- kaggle-ver3-ch5-optuna)
 
 ## 実際のデータ  
 実際のデータを処理する場合，多くの欠損値やカテゴリー変数が含まれており，sklearnが処理できない形をしていることが多いため，事前処理をすることが重要になってくる。
