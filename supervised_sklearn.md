@@ -143,3 +143,5 @@ print("Accuracy: {}".format(cv.score(X_test, y_test)))
 print(classification_report(y_test, y_pred))
 print("Tuned Model Parameters: {}".format(cv.best_params_))
 ```
+
+[自動でカテゴリ変数の作成](https://qiita.com/yoshimo123/items/3717bd17ba74764dbc69)

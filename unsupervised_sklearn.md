@@ -51,3 +51,22 @@ ys = tsne_features[:,1]
 ```
 ## 次元削減(PCA)
 実際のデータではノイズが多く含まれるデータを扱うことになるため，重要な要素だけを抽出し処理することで教師なし学習が可能になる。そのために最も用いられるのがPCAである。PCAは2ステップからなる。　
+```
+from sklearn.decomposition import PCA
+model = PCA()
+pca_features = mdoel.fit_transform(grains)
+xs = pca_features[:,0]
+ys = pca_features[:,1]
+plt.scatter(xs, ys)
+plt.show()
+
+#ピアソンの相関係数を求める。
+correlation, pvalue = pearsonr(xs, ys)
+```
+実際に観察するのに必要な次元数をPCAで決定するのが良い。Seuratのtutorialでもやっているので思い出すと良い。
+
+*NMF* 非負値行列因子分解というのもある。0以上の値のmatrixに対して次元削減を行う。原点からの距離が重要な点となる。基本PCAで良さそう。
+文書推薦などのカウントデータ（0以上)のスコアデータに対しては引き算による複雑性が生じず結果を扱いやすいので用いられることが多いよう。レコメンドではPCAが使われることはほとんどない模様。
+遺伝子発現データもNMFから見えてくるものがありそうだけど。。
+PCAと比較してどのように利点があるのか調べる必要がある。レコメンドとかと組み合わせたらツールの開発につながりそう。
+類似はcosinse類似度により見ていた。
