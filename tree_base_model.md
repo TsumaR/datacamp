@@ -1,7 +1,8 @@
 #決定木
+簡単なところは実行メインで記載している。詳しくははじパタなどを読むと良い。
 
-## Classification and Regression Trees(CARTs)
-木のいいところは，非線形のデータに用いることができ，正則化などが必要ないところである。下記に基本的な例を記す。
+# Classification and Regression Trees(CARTs)
+木のいいところは，非線形のデータに用いることができ，正則化などが必要ないところである。下記に基本的な例を記す。CARTの決定木は2分木である。
 ```
 from sklearn.tree import DecisionTreeClassifier
 dt = DecisionTreeClassifier(max_depth=6, random_state=SEED)
@@ -15,7 +16,7 @@ dt_entropy = DecisionTreeClassifier(max_depth=8, criterion='entropy', random_sta
 ```
 ただし，得られる結果はデフォルトの`gini-index`と同様であり，`gini-index`の方が通常早いため，基本はデフォルトのままで良い。(ジニ係数)
 
-#### 回帰に用いる
+### 回帰に用いる
 回帰の場合，結果は離散値となる。その場合，下記のようにモデルを構築する，min_samples_leafでは，葉に最低含まれるトレーニングデータの割合を示している。
 ```
 dt = DecisionTreeRegressor(max_depth=8,
@@ -27,9 +28,7 @@ dt = DecisionTreeRegressor(max_depth=8,
 モデルの予測誤差は，ノイズ，バリアンス，およびバイアスに分解することができる。バイアスはデータ自体に含まれているものなのでモデル構築の際に操作することができないが，バリアンスとバイアスは別である。バリアンスは予測結果の分散であり，バイアスは真の値と予測結果の差である。そのため，バリアンすとバイアスはトレードオフの関係にあり，バリアンスが小さい場合は学習不足，バイアスが小さい場合は過学習になっている可能性がある。そのため，それら２つがちょうどよくなるようにモデルを構築する必要があり誤差の正規化が必要である。
 しかし，直接的にgeneralization errorを見ることはできないので，K-FoldCVなど，cross variationを用いて，トレーニングデータをvalidとtrainingに分けて検討することが一般である。
 
-
-
-## ensemble learning
+# ensemble learning
 CARTsは非線形であり，正則化の必要もなく，わかりやすく簡単であった。しかし，過学習が起きやすかったり，1変数に大きく影響を受けすぎるなどの問題もある。そこで用いられることが多いのがアンサンブル学習である。アンサンブル学習では，個々に学習した複数の学習機を用いて得られた推測結果をマージして１つの推測結果として用いる手法である。一番簡単なのはVoting Classifierで，`from sklearn.ensemble import VotingClassifier`より使用できる。　
 これでは，単純に多くの判別機によって支持された予想結果を真の予想結果として採用するが，通常はその際に複数のモデルそれぞれに重みを与えるのが一般的であり，単純にこれを用いることはほとんどない。　
 
@@ -79,3 +78,38 @@ importances_sorted.plot(kind='barh', color='lightgreen')
 plt.title('Features Importances')
 plt.show()
 ```
+## ブースティングの進化　
+
+### アダブースト 
+2クラス問題の識別器であり，多クラスに対応するためには1対他識別器を構成する必要がある。　
+先ほどバギングでは単純に，弱識別器を別々で作成し，多数決で予想結果を出力していた。一方，アダブーストは弱識別器の学習結果に従って学習データに重みが付与される。その結果のちに学習する識別器ほど誤りの多い学習データに集中して学習するようになる。　
+弱識別器の数が大きすぎると過学習が生じるので，交差検証法などで選ぶ必要がある。
+![adaboost](https://github.com/TsumaR/datacamp/blob/master/images/adaboost.png)
+```
+from sklearn.ensemble import AdaBoostClassifier
+dt = DecisionTreeClassifier(max_depth=2, random_state=1)
+ada = AdaBoostClassifier(base_estimator=dt, n_estimators=180, random_state=1)
+ada.fit(X_train, y_train)
+y_pred_proba = ada.predict_proba(X_test)[:,1]
+ada_roc_auc = roc_auc_score(y_test, y_pred_proba)
+```
+ここまでははじパタに詳しく書いてある。
+
+### Gradient Boosting (GB)
+コンペで主に使われているいわゆる勾配ブースティング。アダブーストと異なり，学習データへの重みは微調整されず，各予測機は１つ前の予測機の残余誤差をラベルとして利用する。下の図はCARTに対して勾配ブースティングを行なっている様子を表している。
+![GB]()
+[参考](https://qiita.com/Quasi-quant2010/items/10f7ad4ed2e11004990f)
+回帰の場合，
+```
+y(pred) = y1 +　ηr1 + … + ηrN
+```
+が予想結果として出力される。以下に簡単な例を示す。　
+```
+from sklearn.ensemble import GradientBoostingRegressor
+
+gb = GradientBoostingRegressor(max_depth=4,
+            n_estimators=200,
+            random_state=2)
+```
+
+### Stochastic Gradient Boosting  (SGB)
