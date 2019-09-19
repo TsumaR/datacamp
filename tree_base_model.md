@@ -80,7 +80,7 @@ plt.show()
 ```
 ## ブースティングの進化　
 
-### アダブースト 
+### アダブースト
 2クラス問題の識別器であり，多クラスに対応するためには1対他識別器を構成する必要がある。　
 先ほどバギングでは単純に，弱識別器を別々で作成し，多数決で予想結果を出力していた。一方，アダブーストは弱識別器の学習結果に従って学習データに重みが付与される。その結果のちに学習する識別器ほど誤りの多い学習データに集中して学習するようになる。　
 弱識別器の数が大きすぎると過学習が生じるので，交差検証法などで選ぶ必要がある。
@@ -113,3 +113,42 @@ gb = GradientBoostingRegressor(max_depth=4,
 ```
 
 ### Stochastic Gradient Boosting  (SGB)
+勾配ブースティングでは各ステップで全てのデータを用いて学習したが，無作為非復元抽出した部分サンプルから各ステップのツリー構築を行うのが確率勾配ブースティングである。sklearnでは変数を変更するだけで使用することができる。
+```
+#subsample=xを加える
+
+sgbr = GradientBoostingRegressor(max_depth=4,
+            subsample=0.9,
+            max_features=0.75,
+            n_estimators=200,                                
+            random_state=2)
+```
+
+## ハイパラメータチューニング
+いろいろな方法がある。ハイパーパラメータの一覧は`.get_params()`で取得できる。ランダムフォレスト回帰の例。
+```
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import mean_squared_error
+
+#ハイパーパラメータ候補の設定
+params_rf = {
+    'n_estimators':[100,350,500],
+    'max_features':['log2','auto','sqrt'],
+    'min_samples_leaf':[2,10,30]
+}
+
+grid_rf = GridSearchCV(estimator=rf,
+                       param_grid=params_rf,
+                       scoring='neg_mean_squared_error',
+                       cv=3,
+                       verbose=1,
+                       n_jobs=-1)
+
+grid_rf.fit(X_train, X_test)
+
+best_model = grid_rf.best_estimator_
+y_pred = best_model.predict(X_test)
+rmse_test = MSE(y_test, y_pred)**(1/2)
+
+print('Test RMSE of best model: {:.3f}'.format(rmse_test))                    
+```
