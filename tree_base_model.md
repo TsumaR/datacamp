@@ -97,7 +97,7 @@ ada_roc_auc = roc_auc_score(y_test, y_pred_proba)
 
 ### Gradient Boosting (GB)
 コンペで主に使われているいわゆる勾配ブースティング。アダブーストと異なり，学習データへの重みは微調整されず，各予測機は１つ前の予測機の残余誤差をラベルとして利用する。下の図はCARTに対して勾配ブースティングを行なっている様子を表している。
-![GB]()
+![GB](https://github.com/TsumaR/datacamp/blob/master/images/gradiant_boosting.png)
 [参考](https://qiita.com/Quasi-quant2010/items/10f7ad4ed2e11004990f)
 回帰の場合，
 ```
